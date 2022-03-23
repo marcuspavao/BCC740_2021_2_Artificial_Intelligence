@@ -20,10 +20,10 @@ class ToilletPaperEnv():
 
     def change_state(self,action) -> dict[float,int,int]:
 
-        
+    
         self.TPNumber += action['to_buy']
 
-        usage = 1000 + np.random.randn()*100
+        usage = min(1000 + np.random.randn()*100,self.TPNumber)
 
         self.TPNumber -= usage if usage > 0 else 0
 
