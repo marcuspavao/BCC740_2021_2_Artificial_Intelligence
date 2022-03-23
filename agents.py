@@ -6,4 +6,20 @@ class ToilletPaperAg():
         self.current_percepts = env.initial_percepts()
 
     def act(self):
-        pass
+
+        percepts = self.current_percepts()
+        self.price = percepts.price
+        self.TPNumber = percepts.tpnumber
+        self.capacity = percepts.maxcapacity
+        self.clock = percepts.clock
+
+        self.usage_average = (self.TPNumber)/self.clock
+        
+        self.price_average = (self.price)/self.clock
+        
+        if self.TPNumber < (0.3*self.capacity) :      #Quando a quantidade estiver abaixo de 30% da capacidade total ele compra
+            self.tobuy = self.capacity - self.TPNumber        
+
+        self.clock += 1
+        
+        return self.tobuy
