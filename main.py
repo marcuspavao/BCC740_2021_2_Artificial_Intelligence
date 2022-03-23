@@ -8,4 +8,4 @@ env2 = ToilletPaperEnv(10,2000,5000)
 agent = ToilletPaperAg(env1)
 
 for i in range(1000):
-    agent.act()
+    env1.chage_state(agent.act())
