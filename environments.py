@@ -14,16 +14,17 @@ class ToilletPaperEnv():
 
         percepts = {'price':self.price,
                     'tpnumber': self.TPNumber,
-                    'max_capacity':self.max_capacity}
+                    'max_capacity':self.max_capacity,
+                    'clock':self.clock}
         
         return percepts
 
     def change_state(self,action) -> dict[float,int,int]:
 
-        
+    
         self.TPNumber += action['to_buy']
 
-        usage = 1000 + np.random.randn()*100
+        usage = min(1000 + np.random.randn()*100,self.TPNumber)
 
         self.TPNumber -= usage if usage > 0 else 0
 
@@ -31,7 +32,8 @@ class ToilletPaperEnv():
 
         percepts = {'price':self.price,
                     'tpnumber': self.TPNumber,
-                    'max_capacity':self.max_capacity}
+                    'max_capacity':self.max_capacity,
+                    'clock':self.clock}
         
 
         self.clock += 1
