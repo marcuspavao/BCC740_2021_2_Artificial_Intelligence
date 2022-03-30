@@ -29,3 +29,26 @@ class ToilletPaperAg():
         
         self.usage = tpnumber_t_1 + self.to_buy - tpnumber_t 
         self.usage_average = (self.usage_average * (self.age - 1) + self.usage)/self.age
+
+class MazeAgent():
+
+    def __init__(self,env):
+        self.env = env
+        self.percepts = env.initial_percepts()
+        self.F = [[self.percepts['position']]]
+
+    def act(self):
+
+        while self.F:
+            path = self.F.pop(0)
+
+            self.percepts = self.env.change_state({'path':path.copy()})
+
+            if self.percepts['goal']:
+                break
+            else:
+                for n in self.percepts['available_neighbors']:
+                    if n not in path:
+                        self.F.insert(0,path + [n])
+
+        self.env.run()
