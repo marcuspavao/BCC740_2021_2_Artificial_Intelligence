@@ -1,3 +1,5 @@
+import numpy as np
+
 class ToilletPaperAg():
 
     def __init__(self,env) -> None:
@@ -40,7 +42,7 @@ class MazeAgent():
     def act(self):
 
         while self.F:
-            path = self.F.pop(0)
+            path = self.F.pop(-1)
 
             self.percepts = self.env.change_state({'path':path.copy()})
 
@@ -52,3 +54,44 @@ class MazeAgent():
                         self.F.insert(0,path + [n])
 
         self.env.run()
+
+
+class MazeAgentBranchAndBound():
+
+    def __init__(self,env,bound):
+        self.env = env
+        self.percepts = env.initial_percepts()
+        self.F = [[self.percepts['position']]]
+        self.cs = [0]
+        self.hs = [self.heuristic(self.percepts['position'],self.percepts['goal'])]
+        self.bound = bound
+        self.best_path = []
+        self.best_path_cost = np.inf
+
+    def heuristic(self,point,goal):
+        return np.linalg.norm(np.array(point)-np.array(goal),ord=1)
+
+    def act(self):
+
+        while self.F:
+            path = self.F.pop(0)
+            cost = self.cs.pop(0)
+            h = self.hs.pop(0)
+
+            if (cost + h) < self.bound:  
+
+                self.percepts = self.env.change_state({'path':path.copy()})
+            
+                if self.percepts['goal']:
+                    if cost < self.best_path_cost:
+                        self.best_path_cost = cost
+                        self.best_path = path.copy()
+                        self.bound = cost
+                else:
+                    for n in self.percepts['available_neighbors']:
+                        if n not in path:
+                            self.F.insert(0,path + [n])
+                            self.cs.insert(0,len(path)+1)
+                            self.hs.insert(0,self.heuristic(n,self.percepts['goal']))
+
+        self.env.draw_best(self.best_path)

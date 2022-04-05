@@ -1,10 +1,10 @@
 from pyamaze import maze,COLOR,agent
 from environments import Maze
-from agents import MazeAgent
+from agents import MazeAgent, MazeAgentBranchAndBound
 
 
-env = Maze(12,12)
-ag = MazeAgent(env)
+env = Maze(8,8)
+ag = MazeAgentBranchAndBound(env,80)
 ag.act()
 
 

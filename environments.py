@@ -45,7 +45,7 @@ class Maze():
     def __init__(self,n,m) -> None:
         self.start = (n,m)
         self.maze  = maze(n,m)
-        self.maze.CreateMaze()
+        self.maze.CreateMaze(loopPercent=60)
         self.goal = self.maze._goal
         
     def initial_percepts(self) -> dict:
@@ -87,6 +87,10 @@ class Maze():
                 'goal':goal}
 
     def run(self):
+        self.maze.run()
+
+    def draw_best(self,path):
+        self.maze.tracePath({agent(self.maze,shape='arrow',footprints=True):path},kill = False,delay=5)
         self.maze.run()
 
 
