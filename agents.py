@@ -32,7 +32,7 @@ class ToilletPaperAg():
         self.usage = tpnumber_t_1 + self.to_buy - tpnumber_t 
         self.usage_average = (self.usage_average * (self.age - 1) + self.usage)/self.age
 
-class MazeAgent():
+class MazeAgentDFS():
 
     def __init__(self,env):
         self.env = env
@@ -51,9 +51,9 @@ class MazeAgent():
             else:
                 for n in self.percepts['available_neighbors']:
                     if n not in path:
-                        self.F.insert(0,path + [n])
+                        self.F.insert(-1,path + [n])
 
-        self.env.run()
+        self.env.draw_best(path)
 
 
 class MazeAgentBranchAndBound():
@@ -95,3 +95,4 @@ class MazeAgentBranchAndBound():
                             self.hs.insert(0,self.heuristic(n,self.percepts['goal']))
 
         self.env.draw_best(self.best_path)
+        print(self.best_path_cost)
