@@ -62,37 +62,35 @@ class MazeAgentBranchAndBound():
         self.env = env
         self.percepts = env.initial_percepts()
         self.F = [[self.percepts['position']]]
-        self.cs = [0]
-        self.hs = [self.heuristic(self.percepts['position'],self.percepts['goal'])]
         self.bound = bound
         self.best_path = []
-        self.best_path_cost = np.inf
 
-    def heuristic(self,point,goal):
-        return np.linalg.norm(np.array(point)-np.array(goal),ord=1)
+    def cost(self, path):
+        return len(path)-1
+
+    def heuristic(self, path):
+        nk = path[-1]
+        goal = self.env.maze._goal
+        return np.abs(nk[0] - goal[0]) + np.abs(nk[1] - goal[1])
 
     def act(self):
 
         while self.F:
-            path = self.F.pop(0)
-            cost = self.cs.pop(0)
-            h = self.hs.pop(0)
+            path = self.F.pop(-1)
+            c = self.cost(path)
+            h = self.heuristic(path)
 
-            if (cost + h) < self.bound:  
+            if c + h <= self.bound:
 
                 self.percepts = self.env.change_state({'path':path.copy()})
-            
+
                 if self.percepts['goal']:
-                    if cost < self.best_path_cost:
-                        self.best_path_cost = cost
-                        self.best_path = path.copy()
-                        self.bound = cost
+                    self.best_path = path
+                    self.bound = c 
                 else:
                     for n in self.percepts['available_neighbors']:
                         if n not in path:
-                            self.F.insert(0,path + [n])
-                            self.cs.insert(0,len(path)+1)
-                            self.hs.insert(0,self.heuristic(n,self.percepts['goal']))
+                            self.F.insert(-1,path + [n])
 
         self.env.draw_best(self.best_path)
-        print(self.best_path_cost)
+        print(self.bound)

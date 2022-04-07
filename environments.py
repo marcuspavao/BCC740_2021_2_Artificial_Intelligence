@@ -80,7 +80,7 @@ class Maze():
         goal = True if action['path'][-1] == self.maze._goal else False
         position = action['path'][-1]
 
-        self.maze.tracePath({agent(self.maze,shape='arrow',footprints=True):action['path']},kill = True,delay=5)
+        #self.maze.tracePath({agent(self.maze,shape='arrow',footprints=True):action['path']},kill = True,delay=5)
      
         return {'position': position,
                 'available_neighbors':self.get_available_neighboors(position),
