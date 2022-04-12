@@ -55,7 +55,6 @@ class MazeAgentDFS():
 
         self.env.draw_best(path)
 
-
 class MazeAgentBranchAndBound():
 
     def __init__(self,env,bound):

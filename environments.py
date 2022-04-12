@@ -1,6 +1,9 @@
 from matplotlib.style import available
 import numpy as np
 from pyamaze import maze,agent
+import chess
+import chess.svg
+import time
 
 class ToilletPaperEnv():
 
@@ -80,7 +83,7 @@ class Maze():
         goal = True if action['path'][-1] == self.maze._goal else False
         position = action['path'][-1]
 
-        #self.maze.tracePath({agent(self.maze,shape='arrow',footprints=True):action['path']},kill = True,delay=5)
+        self.maze.tracePath({agent(self.maze,shape='arrow',footprints=True):action['path']},kill = True,delay=5)
      
         return {'position': position,
                 'available_neighbors':self.get_available_neighboors(position),
@@ -92,6 +95,27 @@ class Maze():
     def draw_best(self,path):
         self.maze.tracePath({agent(self.maze,shape='arrow',footprints=True):path},kill = False,delay=5)
         self.maze.run()
+
+class nQueensBoard():
+    
+    def __init__(self) -> None:
+        self.board = chess.Board(fen='QQQQQQQQ/8/8/8/8/8/8/8')
+
+    def check_constraints(self,sol):
+        pass
+    
+    def display_solution(self,rows):
+        cols = ['a','b','c','d','e','f','g','h']
+
+        for r, c in zip(rows,cols):
+            if r != 8:
+                self.board.push(chess.Move.from_uci(f'{c}8{c}{r}'))
+            else:
+                self.board.push(chess.Move.from_uci(f'0000'))
+
+
+
+        
 
 
 
