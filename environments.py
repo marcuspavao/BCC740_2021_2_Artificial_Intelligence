@@ -102,16 +102,27 @@ class nQueensBoard():
         self.board = chess.Board(fen='QQQQQQQQ/8/8/8/8/8/8/8')
 
     def check_constraints(self,sol):
-        pass
+        
+        violations = 0
+
+        for i in range(len(sol)):
+            for j in range(len(sol)):
+                if (i!=j and (abs(j-i) == abs(sol[j]-sol[i]))):
+                    violations += 1
+
+        return violations
+
     
     def display_solution(self,rows):
-        cols = ['a','b','c','d','e','f','g','h']
+        
+        if len(rows) == 8:
+            cols = ['a','b','c','d','e','f','g','h']
 
-        for r, c in zip(rows,cols):
-            if r != 8:
-                self.board.push(chess.Move.from_uci(f'{c}8{c}{r}'))
-            else:
-                self.board.push(chess.Move.from_uci(f'0000'))
+            for r, c in zip(rows,cols):
+                if r != 8:
+                    self.board.push(chess.Move.from_uci(f'{c}8{c}{r}'))
+                else:
+                    self.board.push(chess.Move.from_uci(f'0000'))
 
 
 

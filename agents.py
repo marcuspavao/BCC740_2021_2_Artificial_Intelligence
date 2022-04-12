@@ -93,3 +93,34 @@ class MazeAgentBranchAndBound():
 
         self.env.draw_best(self.best_path)
         print(self.bound)
+
+class NQueenSearchAgent():
+
+    def __init__(self,env,nq) -> None:
+        self.env = env
+        self.F = [[]]
+        self.to_dos = [np.arange(1,nq+1)]
+        self.nq = nq
+        self.valid_sol = []
+
+    def search(self):
+
+        while self.F:
+
+            sol = self.F.pop(-1)
+            to_do = self.to_dos.pop(-1)
+
+            if len(sol) == self.nq:
+                if self.env.check_constraints(sol) == 0:
+                    self.valid_sol = sol
+                    print(sol)
+            else:
+                for n in to_do:
+                    self.F.insert(-1,sol + [n])
+                    self.to_dos.insert(-1,to_do[to_do!=n])
+
+        self.env.display_solution(self.valid_sol)
+        
+        return self.valid_sol
+        
+
