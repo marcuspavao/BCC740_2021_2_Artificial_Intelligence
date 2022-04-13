@@ -105,10 +105,11 @@ class nQueensBoard():
         
         violations = 0
 
-        for i in range(len(sol)):
-            for j in range(len(sol)):
-                if (i!=j and (abs(j-i) == abs(sol[j]-sol[i]))):
-                    violations += 1
+        if len(sol) >= 2:
+            for i in range(len(sol)):
+                for j in range(len(sol)):
+                    if (i!=j and (abs(j-i) == abs(sol[j]-sol[i]))):
+                        violations += 1
 
         return violations
 

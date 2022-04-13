@@ -111,13 +111,13 @@ class NQueenSearchAgent():
             to_do = self.to_dos.pop(-1)
 
             if len(sol) == self.nq:
-                if self.env.check_constraints(sol) == 0:
-                    self.valid_sol = sol
-                    print(sol)
+                self.valid_sol = sol
+                print(sol)
             else:
                 for n in to_do:
-                    self.F.insert(-1,sol + [n])
-                    self.to_dos.insert(-1,to_do[to_do!=n])
+                    if self.env.check_constraints(sol + [n]) == 0:
+                        self.F.insert(-1,sol + [n])
+                        self.to_dos.insert(-1,to_do[to_do!=n])
 
         self.env.display_solution(self.valid_sol)
         
