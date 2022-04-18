@@ -94,6 +94,45 @@ class MazeAgentBranchAndBound():
         self.env.draw_best(self.best_path)
         print(self.bound)
 
+class MazeAgentAStar():
+
+    def __init__(self,env):
+        self.env = env
+        self.percepts = env.initial_percepts()
+        self.F = [[self.percepts['position']]]
+        # fs stores the values of cost + heuristic for each path in the frontier
+        self.fs = [self.cost(self.F[0])+self.heuristic(self.F[0])]
+        self.best_path = []
+
+    def cost(self, path):
+        return len(path)-1
+
+    def heuristic(self, path):
+        nk = path[-1]
+        goal = self.env.maze._goal
+        return np.abs(nk[0] - goal[0]) + np.abs(nk[1] - goal[1])
+
+    def act(self):
+
+        while self.F:
+            # Find the path with minimum f
+            minFidx = np.argmin(self.fs)
+            # Remove path with minimum f
+            path = self.F.pop(minFidx)
+
+            self.percepts = self.env.change_state({'path':path.copy()})
+
+            if self.percepts['goal']:
+                self.best_path = path
+                break
+            else:
+                for n in self.percepts['available_neighbors']:
+                    if n not in path:
+                        self.F.insert(-1,path + [n])
+                        self.fs.insert(-1,self.cost(path + [n])+self.heuristic(path + [n]))
+
+        self.env.draw_best(self.best_path)
+
 class NQueenSearchAgent():
 
     def __init__(self,env,nq) -> None:
