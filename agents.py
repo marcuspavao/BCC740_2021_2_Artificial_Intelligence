@@ -119,6 +119,7 @@ class MazeAgentAStar():
             minFidx = np.argmin(self.fs)
             # Remove path with minimum f
             path = self.F.pop(minFidx)
+            self.fs.pop(minFidx)
 
             self.percepts = self.env.change_state({'path':path.copy()})
 
