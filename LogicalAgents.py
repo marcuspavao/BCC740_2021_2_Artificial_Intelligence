@@ -47,21 +47,20 @@ def ask(askable):
     ans = input(f'Is {askable} true?')
     return True if ans in ['sim','yes','y','s'] else False
 
-def explain(g, kb, explanation = set()):
-    
-    if g:
-        selected = g[0]
-        if selected in kb['assumables']:
-            return explain(g[1:], kb, explanation|{selected})
+def explain(observations, kb, explanation = set()):
+    if observations:
+        a = observations[0]
+
+        if a in kb['assumables']:
+            return explain(observations[1:],kb,explanation|{a})
         else:
-            bodies = kb['rules'][selected]
-            
+            bodies = kb['rules'][a]
             explanations = []
+
             for body in bodies:
-                explanations += explain(body + g[1:], kb, explanation)
+                explanations += explain(body + observations[1:],kb,explanation)
 
             return explanations
-
     return [explanation]
 
 if __name__ == "__main__":
@@ -86,4 +85,4 @@ if __name__ == "__main__":
             'assumables':['smokes','influenza','infection'] }
 
 
-    print(explain(['fever','wheezing'],kb))
+    print(explain(['False'],kb))
